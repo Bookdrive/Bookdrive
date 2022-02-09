@@ -1,0 +1,23 @@
+{
+  "name": "sql-project",
+  "version": "1.0.0",
+  "description": "Sql-project for Bookdrive - A Books and Notes sharing system",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sql",
+    "mariadb",
+    "books",
+    "notes",
+    "students",
+    "college"
+  ],
+  "author": "amit",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "serve-static": "^1.14.2"
+  }
+}
