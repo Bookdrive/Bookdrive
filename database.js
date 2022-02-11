@@ -10,3 +10,12 @@ const pool = mariadb.createPool({
     multipleStatements: true,
     connectionLimit: 5
 });
+
+pool.getConnection()
+    .then(conn => {
+      console.log("connected ! connection id is " + conn.threadId);
+      conn.release(); //release to pool
+    })
+    .catch(err => {
+      console.log("not connected due to error: " + err);
+    });
