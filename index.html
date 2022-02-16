@@ -15,12 +15,14 @@
 	<div id="bookscont">
 		<h1>Welcome!</h1>
 			<template v-for="{ Title, Author, Type, Pages } in books">
+				<div class="bookcard">
 					<strong>
 						<p class="title">{{ Title }}</p>
 					</strong>
 					<em class="author">{{ Author }}</em>
 					<p class="type">{{ Type }}</p>
 					<p class="pages">{{ Pages }}</p>
+				</div>
 			</template>
 	</div>
 
