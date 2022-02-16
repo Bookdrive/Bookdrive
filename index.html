@@ -37,7 +37,6 @@
 				async fetchData() {
 					const url = `http://localhost:3000/`
 					this.books = await (await fetch(url, {headers: {'Access-Control-Allow-Origin':`*`}})).json()
-					console.log(this.books)
 				}
 			}
 		}).mount('#bookscont')
