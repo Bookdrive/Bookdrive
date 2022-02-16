@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bookdrive</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<script src="https://unpkg.com/vue@3"></script>
+	
+	<div id="bookscont">
+		<h1>Welcome!</h1>
+			<template v-for="{ Title, Author, Type, Pages } in books">
+					<strong>
+						<p class="title">{{ Title }}</p>
+					</strong>
+					<em class="author">{{ Author }}</em>
+					<p class="type">{{ Type }}</p>
+					<p class="pages">{{ Pages }}</p>
+			</template>
+	</div>
+
+	<script>
+		Vue.createApp({
+			data: () => ({
+				books: null
+			}),
+			created() {
+				// fetch on init
+				this.fetchData()
+			},
+			methods: {
+				async fetchData() {
+					const url = `http://localhost:3000/`
+					this.books = await (await fetch(url, {headers: {'Access-Control-Allow-Origin':`*`}})).json()
+					console.log(this.books)
+				}
+			}
+		}).mount('#bookscont')
+		
+	</script>
+
+	<script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>
