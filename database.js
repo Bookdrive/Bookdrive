@@ -1,4 +1,4 @@
-var mariadb = require('mariadb');
+let mariadb = require('mariadb');
 require('dotenv').config();
 
 const pool = mariadb.createPool({
@@ -19,3 +19,8 @@ pool.getConnection()
     .catch(err => {
       console.log("not connected due to error: " + err);
     });
+    
+//Export it for executor.js
+module.exports = Object.freeze({
+  pool: pool
+});
