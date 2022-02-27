@@ -10,3 +10,43 @@
     padding : 2px;
     border-radius: 10px;;
 }
+
+.id{
+    display: none;
+}
+
+.bookcard:hover{
+    background-color : yellow;
+}
+
+/* This is black overlay, right now hidden(behind posts popup) but kept here
+ if we would like a popup of small size then it would be needed 
+*/
+
+#posts-overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%; /* Blackout Background document*/
+    height: 100%; /* Blackout Background document */
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* On top of Parent document */
+}
+
+#posts-popup {
+    display: none; /* Hidden by default */
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    overflow-y: auto;
+    background-color: white; /* white background with opacity */
+    z-index: 3; /* On top of black overlay */
+    cursor: pointer; /* may be we will need it on specific elements will apply later maybe */
+}

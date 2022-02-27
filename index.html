@@ -14,19 +14,50 @@
 	
 	<div id="bookscont">
 		<h1>Welcome!</h1>
-			<template v-for="{ Title, Author, Type, Pages } in books">
-				<div class="bookcard">
-					<strong>
-						<p class="title">{{ Title }}</p>
-					</strong>
-					<em class="author">{{ Author }}</em>
-					<p class="type">{{ Type }}</p>
-					<p class="pages">{{ Pages }}</p>
-				</div>
-			</template>
+		<template v-for="{bookId, Title, Author, Type, Pages } in books">
+			<div class="bookcard">
+				<p class="id">{{ bookId }}</p>
+				<strong>
+					<p class="title">{{ Title }}</p>
+				</strong>
+				<em class="author">{{ Author }}</em>
+				<p class="type">{{ Type }}</p>
+				<p class="pages">{{ Pages }}</p>
+			</div>
+		</template>
+	</div>
+
+	<div id="posts-overlay">
+			<div id="posts-popup">
+				<img id="image" src="" alt="Book cover">
+				<p id="userId"></p>
+				<p id="bookId"></p>
+				<h2 id="title">Title of book</h2>
+				<p>Author:<span id="author"></span></p>
+				<p id="price">price of book/ebook</p>
+				<p>Pages:<span id="pages"></span></p>
+				<em>type:<span id="type"></span></em>
+				<p>Book uploader name: <span id="username"></span></p>
+				<button><a id="fileUrl">Download</a></button><br>
+				<details>
+					<summary>Contact</summary>
+					<p>Address:<span id="address"></span></p>
+					<p>City:<span id="city"></span></p>
+					<p>Email:<span id="email"></span></p>
+					<p>Phone No: <span id="phoneNo"></span></p>
+				</details>
+				<p>Description of the book Lorem ipsum dolor sit, amet consectetur adipisicing elit. Distinctio
+					recusandae
+					quibusdam
+					debitis, omnis aliquam animi quo quos iusto totam ut maxime eos quidem, pariatur unde ea sapiente,
+					eius
+					corrupti
+					quaerat?</p>
+			</div>
 	</div>
 
 	<script>
+
 		Vue.createApp({
 			data: () => ({
 				books: null
@@ -38,13 +69,17 @@
 			methods: {
 				async fetchData() {
 					const url = `http://localhost:3000/`
-					this.books = await (await fetch(url, {headers: {'Access-Control-Allow-Origin':`*`}})).json()
+					this.books = await (await fetch(url, { headers: { 'Access-Control-Allow-Origin': `*` } })).json()
 				}
 			}
 		}).mount('#bookscont')
-		
 	</script>
 
+	<script>
+		function on() {
+
+		}
+	</script>
 	<script type="text/javascript" src="script.js"></script>
 </body>
 
