@@ -26,3 +26,4 @@ Structure of the repository right now is the following:
 ``` shell
 mysql -u yourusername -p yourpassword Bookdrive < /path/to/Bookdrive.sql
 ```
+Database right now doesn't have the `Categories` table and many attributes from different tables but only the required ones for functional purposes.
