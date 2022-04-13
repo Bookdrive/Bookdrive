@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics</title>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            display: grid;
+        }
+
+        .chart--container {
+            width: 100vw;
+            height: 100%;
+            min-height: 300;
+            overflow: auto;
+            box-shadow: inset;
+        }
+
+        h1 {
+            font-size: 40;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="booksCountChart" class="chart--container"></div>
+    <h1>Users uploading the books from around the world</h1>
+    <div id="usersLocationChart" class="chart--container"></div>
+    <div id="booksChart"></div>
+    <div id="fields"></div>
+
+    <script>
+        //object consisting data for users countries
+        var dataObj = {
+            shapes: [{
+                //type of the chart -> map
+                type: 'zingchart.maps',
+                options: {
+                    //map of countries
+                    name: 'world.countries',
+                    zooming: true,
+                    panning: true,
+                    scrolling: true,
+                    style: {
+                        items: {
+
+                        }
+                    }
+                }
+            }]
+        }
+
+        fetch(`http://localhost:3000/usrCont`, { headers: { 'Access-Control-Allow-Origin': `*` } })
+            .then(function (res) {
+                return res.json();
+            }).then(function (contCode) {
+                console.log(contCode);
+                addToGraph(contCode);
+            });
+
+        function addToGraph(alphaIsoCodes) {
+            for (var i = 0; i < alphaIsoCodes.length; i++) {
+                var cont_code = alphaIsoCodes[i].cont_code;
+                dataObj.shapes[0].options.style.items[cont_code] = { backgroundColor: '#29a2cc' };
+            }
+            console.log(dataObj.shapes[0].options.style.items);
+        }
+        console.log(dataObj.shapes[0].options.style.items);
+
+        //first chart showing books count growth
+        var booksCount = {
+            graphset: [{
+                type: "bar",
+                plot: {
+                    animaion: {
+                        effect: "11",
+                        method: "3",
+                        sequence: "ANIMATION_BY_PLOT_AND_NODE",
+                        speed: 50
+                    },
+                },
+                title: { text: "1000+ Books and still adding...", fontSize: 40 },
+
+                "scale-y": { values: "0:1200" },
+                "scale-x": { labels: ["", "", "", "", "", "", "", "", "", "", "", ""] },
+                "series": [{
+
+                    "values": [3, 6, 9, 15, 20, 100, 200, 500, 900, 1123]
+                }],
+            }]
+        };
+
+        //
+        var booksChartConfig = {
+            graphset: [{
+                type: 'sunburst',
+                plot: {
+                    //animation: {},
+                    valueBox: {
+                        text: '%data-vbtext',
+                        color: '#000',
+                        fontSize: '10px',
+                        // visible: null
+                    },
+                    tooltipText: '<span style=\'font-size:19px\'>%plot-text</span><br/>Size: %v',
+                    alpha: 0.7
+                },
+                title: {
+                    text: "Books Chart"
+                },
+                series: []
+            }]
+        };
+
+        fetch(`http://localhost:3000/`, { headers: { 'Access-Control-Allow-Origin': `*` } })
+            .then(function (response) {
+                return response.json();
+            }).then(function (booksInfo) {
+                //console.log(booksInfo);
+                addToBooksChart(booksInfo);
+            });
+
+        function addToBooksChart(booksInfo) {
+            //console.log(booksInfo);
+            booksChartConfig.graphset[0].series.push({
+                id: 'books',
+                text: 'Books',
+                parent: '',
+            }, {
+                id: 'author',
+                text: 'Author',
+                parent: 'books',
+
+            }, {
+                id: 'title',
+                text: 'Title',
+                parent: 'books',
+            });
+
+            for (var i = 0; i < 100; i++) {
+                booksChartConfig.graphset[0].series.push({
+                    id: booksInfo[i].bookId,
+                    text: booksInfo[i].Title,
+                    parent: 'title',
+                    value: Math.floor((Math.random() * 1000) + 1)
+                });
+                booksChartConfig.graphset[0].series.push({
+                    id: booksInfo[i].bookId,
+                    text: booksInfo[i].Author,
+                    parent: 'author',
+                    value: Math.floor((Math.random() * 1000) + 1)
+                })
+                // booksData[i]= {
+                //     id: booksInfo[i].Title,
+                //     text: booksInfo[i].Title,
+                //     parent: 'author',
+                //     value: Math.floor((Math.random() * 100000) + 1)
+                // }
+
+            }
+            //console.log(booksChartConfig.graphset.series);
+
+            //console.log(booksData[3]);
+        }
+
+        console.log(booksChartConfig.graphset[0].series);
+
+        var fieldsConfig = {
+            type: "pie",
+            plot: {
+                borderColor: "#2B313B",
+                borderWidth: 5,
+                // slice: 90,
+                valueBox: {
+                    placement: 'out',
+                    text: '%t\n%npv%',
+                    fontFamily: "Open Sans"
+                },
+                tooltip: {
+                    fontSize: '18',
+                    fontFamily: "Open Sans",
+                    padding: "5 10",
+                    text: "%npv%"
+                },
+                animation: {
+                    effect: 2,
+                    method: 5,
+                    speed: 900,
+                    sequence: 1,
+                    delay: 3000
+                }
+            },
+            title: {
+                fontColor: "#8e99a9",
+                text: 'Fields enriched with varieties',
+                align: "left",
+                offsetX: 10,
+                fontFamily: "Open Sans",
+                fontSize: 25
+            },
+            // subtitle: {
+            //     offsetX: 10,
+            //     offsetY: 10,
+            //     fontColor: "#8e99a9",
+            //     fontFamily: "Open Sans",
+            //     fontSize: "16",
+            //     text: 'May 2016',
+            //     align: "left"
+            // },
+            plotarea: {
+                margin: "20 0 0 0"
+            },
+            series: []
+        };
+
+        fetch(`http://localhost:3000/fields`, { headers: { 'Access-Control-Allow-Origin': `*` } })
+            .then(function (res) {
+                return res.json();
+            }).then(function (fields) {
+                addTofields(fields);
+            }).then(
+		zingchart.render({
+                id: 'fields',
+                data: fieldsConfig,
+                height: '800px',
+                width: '100%'
+            }));
+
+        function addTofields(fields) {
+            for (var i = 0; i < fields.length; i++) {
+               var data = {
+                    text: fields[i].field,
+                    values: [fields[i].percentage],
+                    backgroundColor: '#6FB07F'
+                }
+                fieldsConfig.series.push(data);
+                //console.log(fieldsConfig.series);
+            }
+            
+        }
+        console.log(fieldsConfig.series);
+        // window.onload = function () {
+            zingchart.render({
+                id: 'booksCountChart',
+                data: booksCount,
+                height: '800px',
+                width: '98%'
+            });
+
+            zingchart.loadModules('maps, maps-world-countries', function (e) {
+                zingchart.render({
+                    id: 'usersLocationChart',
+                    data: dataObj,
+                    height: '800px',
+                    width: '100%'
+                });
+            });
+
+            zingchart.render({
+                id: 'booksChart',
+                data: booksChartConfig,
+                height: '800px',
+                width: '100%',
+            });
+
+            // zingchart.render({
+            //     id: 'fields',
+            //     data: fieldsConfig,
+            //     height: '800px',
+            //     width: '100%'
+            // });
+        // }
+        console.log(fieldsConfig['series']);
+
+    </script>
+</body>
+
+</html>

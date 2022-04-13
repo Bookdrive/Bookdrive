@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics</title>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            display: grid;
+        }
+
+        .chart--container {
+            width: 100vw;
+            height: 100%;
+            min-height: 300;
+            overflow: auto;
+            box-shadow: inset;
+        }
+
+        h1 {
+            font-size: 40;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="booksCountChart" class="chart--container"></div>
+    <h1>Users uploading the books from around the world</h1>
+    <div id="usersLocationChart" class="chart--container"></div>
+    <div id="booksChart"></div>
+    <div id="fields"></div>
+
+    <script>
+        //object consisting data for users countries
+        var dataObj = {
+            shapes: [{
+                //type of the chart -> map
+                type: 'zingchart.maps',
+                options: {
+                    //map of countries
+                    name: 'world.countries',
+                    zooming: true,
+                    panning: true,
+                    scrolling: true,
+                    style: {
+                        items: {
+
+                        }
+                    }
+                }
+            }]
+        }
+
+        fetch(`http://localhost:3000/usrCont`, { headers: { 'Access-Control-Allow-Origin': `*` } })
+            .then(function (res) {
+                return res.json();
+            }).then(function (contCode) {
+                console.log(contCode);
+                addToGraph(contCode);
+            });
+
+        function addToGraph(alphaIsoCodes) {
+            for (let i = 0; i < alphaIsoCodes.length; i++) {
+                var cont_code = alphaIsoCodes[i].cont_code;
+                dataObj.shapes[0].options.style.items[cont_code] = { backgroundColor: '#29a2cc' };
+            }
+            console.log(dataObj.shapes[0].options.style.items);
+        }
+        console.log(dataObj.shapes[0].options.style.items);
+
+        //first chart showing books count growth
+        var booksCount = {
+            graphset: [{
+                type: "bar",
+                plot: {
+                    animaion: {
+                        effect: "11",
+                        method: "3",
+                        sequence: "ANIMATION_BY_PLOT_AND_NODE",
+                        speed: 50
+                    },
+                },
+                title: { text: "1000+ Books and still adding...", fontSize: 40 },
+
+                "scale-y": { values: "0:1200" },
+                "scale-x": { labels: ["", "", "", "", "", "", "", "", "", "", "", ""] },
+                "series": [{
+
+                    "values": [3, 6, 9, 15, 20, 100, 200, 500, 900, 1123]
+                }],
+            }]
+        };
+
+        //
+        var booksChartConfig = {
+            graphset: [{
+                type: 'sunburst',
+                plot: {
+                    //animation: {},
+                    valueBox: {
+                        text: '%data-vbtext',
+                        color: '#000',
+                        fontSize: '10px',
+                        // visible: null
+                    },
+                    tooltipText: '<span style=\'font-size:19px\'>%plot-text</span><br/>NumberOfBooks: %v',
+                    alpha: 0.7
+                },
+                title: {
+                    text: "Books Chart"
+                },
+                series: [
+  {
+    "id": "books",
+    "text": "Books",
+    "parent": ""
+  },
+  {
+    "id": "author",
+    "text": "Author",
+    "parent": "books"
+  },
+  {
+    "id": "title",
+    "text": "Title",
+    "parent": "books"
+  },
+  {
+    "id": 1,
+    "text": "Mybook",
+    "parent": "title",
+    "value": 995
+  },
+  {
+    "id": 1,
+    "text": "MyAuthor",
+    "parent": "author",
+    "value": 284
+  },
+  {
+    "id": 2,
+    "text": "Trawler personifications sisterhood's shouted dispute's readiness",
+    "parent": "title",
+    "value": 76
+  },
+  {
+    "id": 2,
+    "text": "Ezekiel Simonnin",
+    "parent": "author",
+    "value": 803
+  },
+  {
+    "id": 3,
+    "text": "Boulevards abscess mermaids defrost",
+    "parent": "title",
+    "value": 540
+  },
+  {
+    "id": 3,
+    "text": "Lesli Fairey",
+    "parent": "author",
+    "value": 85
+  },
+  {
+    "id": 4,
+    "text": "Bovine's duplicate privileges lot forget",
+    "parent": "title",
+    "value": 246
+  },
+  {
+    "id": 4,
+    "text": "Dev Sowerby",
+    "parent": "author",
+    "value": 948
+  },
+  {
+    "id": 5,
+    "text": "Lambed sporting historically payed nosebleed's sideshow searchlight's",
+    "parent": "title",
+    "value": 537
+  },
+  {
+    "id": 5,
+    "text": "Montgomery Goreisr",
+    "parent": "author",
+    "value": 339
+  },
+  {
+    "id": 6,
+    "text": "Porting jerking striker's consequently",
+    "parent": "title",
+    "value": 183
+  },
+  {
+    "id": 6,
+    "text": "Gayle Kinvan",
+    "parent": "author",
+    "value": 249
+  },
+  {
+    "id": 7,
+    "text": "Sandier dilating slumber's almanac messenger divided deity",
+    "parent": "title",
+    "value": 145
+  },
+  {
+    "id": 7,
+    "text": "Vin Lugg",
+    "parent": "author",
+    "value": 873
+  },
+  {
+    "id": 8,
+    "text": "Hopes calicos affixed moaned burst catastrophic",
+    "parent": "title",
+    "value": 696
+  },
+  {
+    "id": 8,
+    "text": "Donnie Gebbe",
+    "parent": "author",
+    "value": 862
+  },
+  {
+    "id": 9,
+    "text": "Dearest cameo dynamos liars consumable filling",
+    "parent": "title",
+    "value": 626
+  },
+  {
+    "id": 9,
+    "text": "Ingeberg Halewood",
+    "parent": "author",
+    "value": 885
+  },
+  {
+    "id": 10,
+    "text": "Depart lousier sexy cross",
+    "parent": "title",
+    "value": 685
+  },
+  {
+    "id": 10,
+    "text": "Edwin Marklow",
+    "parent": "author",
+    "value": 546
+  },
+  {
+    "id": 11,
+    "text": "Knob spearhead's squired mark",
+    "parent": "title",
+    "value": 726
+  },
+  {
+    "id": 11,
+    "text": "Odell Finnes",
+    "parent": "author",
+    "value": 186
+  },
+  {
+    "id": 12,
+    "text": "Vineyards interaction's cull's appendicitis's master connecter dusk's",
+    "parent": "title",
+    "value": 28
+  },
+  {
+    "id": 12,
+    "text": "Lucien Padell",
+    "parent": "author",
+    "value": 72
+  },
+  {
+    "id": 13,
+    "text": "Caution idolize foreswearing",
+    "parent": "title",
+    "value": 875
+  },
+  {
+    "id": 13,
+    "text": "Hillary Jahan",
+    "parent": "author",
+    "value": 790
+  },
+  {
+    "id": 14,
+    "text": "Brother's lighthouses minuscule's marvelled pitch",
+    "parent": "title",
+    "value": 132
+  },
+  {
+    "id": 14,
+    "text": "Letta Scawn",
+    "parent": "author",
+    "value": 464
+  },
+  {
+    "id": 15,
+    "text": "Foundering expression reluctant blindingly perplexity's disrespected lapping",
+    "parent": "title",
+    "value": 919
+  },
+  {
+    "id": 15,
+    "text": "Kristan Ricards",
+    "parent": "author",
+    "value": 667
+  },
+  {
+    "id": 16,
+    "text": "Batch's marksman triter",
+    "parent": "title",
+    "value": 148
+  },
+  {
+    "id": 16,
+    "text": "Josy Carlo",
+    "parent": "author",
+    "value": 515
+  },
+  {
+    "id": 17,
+    "text": "Ranked walls philanthropist's rival columns",
+    "parent": "title",
+    "value": 250
+  },
+  {
+    "id": 17,
+    "text": "Nelli Wyse",
+    "parent": "author",
+    "value": 984
+  },
+  {
+    "id": 18,
+    "text": "Shadowing telling enriches gust discussion ridged",
+    "parent": "title",
+    "value": 837
+  },
+  {
+    "id": 18,
+    "text": "Cathyleen Orpwood",
+    "parent": "author",
+    "value": 418
+  },
+  {
+    "id": 19,
+    "text": "Oblique's possible reception undecidable",
+    "parent": "title",
+    "value": 112
+  },
+  {
+    "id": 19,
+    "text": "Shandeigh Bushnell",
+    "parent": "author",
+    "value": 934
+  },
+  {
+    "id": 20,
+    "text": "Everlastings stratified shun carol's index's ravened fagots",
+    "parent": "title",
+    "value": 541
+  },
+  {
+    "id": 20,
+    "text": "Garnette Jamot",
+    "parent": "author",
+    "value": 836
+  },
+  {
+    "id": 21,
+    "text": "Murders giggle whys drawls",
+    "parent": "title",
+    "value": 140
+  },
+  {
+    "id": 21,
+    "text": "Carine Gipp",
+    "parent": "author",
+    "value": 663
+  },
+  {
+    "id": 22,
+    "text": "Cleverness's desperately scrawling misuse fermentation's",
+    "parent": "title",
+    "value": 8
+  },
+  {
+    "id": 22,
+    "text": "Micah Smiths",
+    "parent": "author",
+    "value": 358
+  },
+  {
+    "id": 23,
+    "text": "Closets assesses lunged subsection's congest stunt thanked",
+    "parent": "title",
+    "value": 904
+  },
+  {
+    "id": 23,
+    "text": "Ancell Palfreyman",
+    "parent": "author",
+    "value": 146
+  },
+  {
+    "id": 24,
+    "text": "Narrated comings blog's cliff gaiety's",
+    "parent": "title",
+    "value": 947
+  },
+  {
+    "id": 24,
+    "text": "Kaila Larter",
+    "parent": "author",
+    "value": 895
+  },
+  {
+    "id": 25,
+    "text": "Bout slab's spilt",
+    "parent": "title",
+    "value": 137
+  },
+  {
+    "id": 25,
+    "text": "Persis Villiers",
+    "parent": "author",
+    "value": 777
+  },
+  {
+    "id": 26,
+    "text": "Voice nuzzled loonies countering",
+    "parent": "title",
+    "value": 475
+  },
+  {
+    "id": 26,
+    "text": "Willis Zini",
+    "parent": "author",
+    "value": 408
+  },
+  {
+    "id": 27,
+    "text": "Modern wises barraged buckets friendship",
+    "parent": "title",
+    "value": 756
+  },
+  {
+    "id": 27,
+    "text": "Phineas Cosgreave",
+    "parent": "author",
+    "value": 771
+  },
+  {
+    "id": 28,
+    "text": "Loophole's drift's wheedle solitude letdown's",
+    "parent": "title",
+    "value": 343
+  },
+  {
+    "id": 28,
+    "text": "Reagan Dobbyn",
+    "parent": "author",
+    "value": 197
+  },
+  {
+    "id": 29,
+    "text": "Sanatoria burying sorcerers autopsying drapery",
+    "parent": "title",
+    "value": 485
+  },
+  {
+    "id": 29,
+    "text": "Cece Tuxill",
+    "parent": "author",
+    "value": 346
+  },
+  {
+    "id": 30,
+    "text": "Tongs thatcher chloroforming mechanical buttering notable's preyed",
+    "parent": "title",
+    "value": 183
+  },
+  {
+    "id": 30,
+    "text": "Kit Rosetti",
+    "parent": "author",
+    "value": 555
+  },
+  {
+    "id": 31,
+    "text": "Natural's sisterhood's dramatize dub's",
+    "parent": "title",
+    "value": 972
+  },
+  {
+    "id": 31,
+    "text": "Job Convery",
+    "parent": "author",
+    "value": 914
+  },
+  {
+    "id": 32,
+    "text": "Criminally diaphragms exuberance prune's bearing's purple's wade",
+    "parent": "title",
+    "value": 802
+  },
+  {
+    "id": 32,
+    "text": "Cloe Ebanks",
+    "parent": "author",
+    "value": 817
+  },
+  {
+    "id": 33,
+    "text": "Coil's ecstatic replenishes sputter's",
+    "parent": "title",
+    "value": 930
+  },
+  {
+    "id": 33,
+    "text": "Eleonore Bowmer",
+    "parent": "author",
+    "value": 284
+  },
+  {
+    "id": 34,
+    "text": "Tinselling janitors bellied frequenting",
+    "parent": "title",
+    "value": 366
+  },
+  {
+    "id": 34,
+    "text": "Henryetta Gawne",
+    "parent": "author",
+    "value": 684
+  },
+  {
+    "id": 35,
+    "text": "Buoyancy's adhesive waste mutts partaking cataract's vying",
+    "parent": "title",
+    "value": 175
+  },
+  {
+    "id": 35,
+    "text": "Aloisia Kembley",
+    "parent": "author",
+    "value": 115
+  },
+  {
+    "id": 36,
+    "text": "Fluxes weights washing",
+    "parent": "title",
+    "value": 593
+  },
+  {
+    "id": 36,
+    "text": "Vevay Snelling",
+    "parent": "author",
+    "value": 928
+  },
+  {
+    "id": 37,
+    "text": "Coastline bunker impurities",
+    "parent": "title",
+    "value": 323
+  },
+  {
+    "id": 37,
+    "text": "Fania Eborall",
+    "parent": "author",
+    "value": 194
+  },
+  {
+    "id": 38,
+    "text": "Money's reprogramming critiquing bond's bush temporary",
+    "parent": "title",
+    "value": 335
+  },
+  {
+    "id": 38,
+    "text": "Cherry Maty",
+    "parent": "author",
+    "value": 395
+  },
+  {
+    "id": 39,
+    "text": "Accruing decapitate dependence caption's culled",
+    "parent": "title",
+    "value": 323
+  },
+  {
+    "id": 39,
+    "text": "Peirce Cauderlie",
+    "parent": "author",
+    "value": 308
+  },
+  {
+    "id": 40,
+    "text": "Calking's dislocate devotee cropping gingham's superstition",
+    "parent": "title",
+    "value": 286
+  },
+  {
+    "id": 40,
+    "text": "Viviana Shanley",
+    "parent": "author",
+    "value": 271
+  },
+  {
+    "id": 41,
+    "text": "Reel olfactory cowers alerts",
+    "parent": "title",
+    "value": 580
+  },
+  {
+    "id": 41,
+    "text": "Melvin Stains",
+    "parent": "author",
+    "value": 629
+  },
+  {
+    "id": 42,
+    "text": "Fishes ravening cyst",
+    "parent": "title",
+    "value": 953
+  },
+  {
+    "id": 42,
+    "text": "Brigitta Cumberlidge",
+    "parent": "author",
+    "value": 541
+  },
+  {
+    "id": 43,
+    "text": "Scholarship unwinds reflexes marriages",
+    "parent": "title",
+    "value": 262
+  },
+  {
+    "id": 43,
+    "text": "Raeann Colwill",
+    "parent": "author",
+    "value": 867
+  },
+  {
+    "id": 44,
+    "text": "Toil pointers horizontally different bunkers gloating appoints",
+    "parent": "title",
+    "value": 242
+  },
+  {
+    "id": 44,
+    "text": "Maura Mannock",
+    "parent": "author",
+    "value": 467
+  },
+  {
+    "id": 45,
+    "text": "Cottages faint's corrupted hostess's crisscrossed poodle",
+    "parent": "title",
+    "value": 471
+  },
+  {
+    "id": 45,
+    "text": "Hartley Monery",
+    "parent": "author",
+    "value": 218
+  },
+  {
+    "id": 46,
+    "text": "Untangle fetich meaningless canopy's knee enslaves trimester's",
+    "parent": "title",
+    "value": 813
+  },
+  {
+    "id": 46,
+    "text": "Salem Izod",
+    "parent": "author",
+    "value": 546
+  },
+  {
+    "id": 47,
+    "text": "Wrangle's robin gagging mew clumsier",
+    "parent": "title",
+    "value": 445
+  },
+  {
+    "id": 47,
+    "text": "Codi Hayer",
+    "parent": "author",
+    "value": 587
+  },
+  {
+    "id": 48,
+    "text": "Prairie raspberry hyena awfullest century's warmest",
+    "parent": "title",
+    "value": 893
+  },
+  {
+    "id": 48,
+    "text": "Ardella Bullard",
+    "parent": "author",
+    "value": 319
+  },
+  {
+    "id": 49,
+    "text": "Inhuman championed outputs",
+    "parent": "title",
+    "value": 627
+  },
+  {
+    "id": 49,
+    "text": "Bayard Cowitz",
+    "parent": "author",
+    "value": 842
+  },
+  {
+    "id": 50,
+    "text": "Shrouded quarried instructor numbness's pigeonhole's disapproves ratios",
+    "parent": "title",
+    "value": 869
+  },
+  {
+    "id": 50,
+    "text": "Sheryl Fenkel",
+    "parent": "author",
+    "value": 407
+  },
+  {
+    "id": 51,
+    "text": "Mutilates avowed expounds widest nurture's",
+    "parent": "title",
+    "value": 188
+  },
+  {
+    "id": 51,
+    "text": "Ceciley Itzik",
+    "parent": "author",
+    "value": 983
+  },
+  {
+    "id": 52,
+    "text": "Delusion defraud magpies veteran entail saliva",
+    "parent": "title",
+    "value": 567
+  },
+  {
+    "id": 52,
+    "text": "Darleen Ferronel",
+    "parent": "author",
+    "value": 360
+  },
+  {
+    "id": 53,
+    "text": "Commissioners celebration's allusions cannon's forces",
+    "parent": "title",
+    "value": 951
+  },
+  {
+    "id": 53,
+    "text": "Allsun Mussolini",
+    "parent": "author",
+    "value": 536
+  },
+  {
+    "id": 54,
+    "text": "Circulation's mortifying annuities battlefields mathematician's thickest dogmatic",
+    "parent": "title",
+    "value": 926
+  },
+  {
+    "id": 54,
+    "text": "Milty Gurney",
+    "parent": "author",
+    "value": 160
+  },
+  {
+    "id": 55,
+    "text": "Disguised canary's congratulates bettors scorching buys",
+    "parent": "title",
+    "value": 95
+  },
+  {
+    "id": 55,
+    "text": "Lula Ryle",
+    "parent": "author",
+    "value": 177
+  },
+  {
+    "id": 56,
+    "text": "Daises nearly confirmed",
+    "parent": "title",
+    "value": 13
+  },
+  {
+    "id": 56,
+    "text": "Tori Kettles",
+    "parent": "author",
+    "value": 716
+  },
+  {
+    "id": 57,
+    "text": "Reprove allow unfilled opposed penitence's fancies",
+    "parent": "title",
+    "value": 546
+  },
+  {
+    "id": 57,
+    "text": "Urson Duffie",
+    "parent": "author",
+    "value": 557
+  },
+  {
+    "id": 58,
+    "text": "Blued accredit slash classified superiority reincarnate",
+    "parent": "title",
+    "value": 794
+  },
+  {
+    "id": 58,
+    "text": "Liane Cullip",
+    "parent": "author",
+    "value": 189
+  },
+  {
+    "id": 59,
+    "text": "Excruciating careered curses",
+    "parent": "title",
+    "value": 25
+  },
+  {
+    "id": 59,
+    "text": "Ealasaid Sheen",
+    "parent": "author",
+    "value": 134
+  },
+  {
+    "id": 60,
+    "text": "Bartering tuba's thong",
+    "parent": "title",
+    "value": 123
+  },
+  {
+    "id": 60,
+    "text": "Clarence Rizzardi",
+    "parent": "author",
+    "value": 450
+  },
+  {
+    "id": 61,
+    "text": "Asteroid's escalate progressions grovels catsup officiates gashing",
+    "parent": "title",
+    "value": 26
+  },
+  {
+    "id": 61,
+    "text": "Emanuel Yeomans",
+    "parent": "author",
+    "value": 403
+  },
+  {
+    "id": 62,
+    "text": "Pomegranate imaginative miscarried sight's momentum's",
+    "parent": "title",
+    "value": 628
+  },
+  {
+    "id": 62,
+    "text": "Ax Brosini",
+    "parent": "author",
+    "value": 538
+  },
+  {
+    "id": 63,
+    "text": "Diversity sensibly rowdiness's exhales idle",
+    "parent": "title",
+    "value": 733
+  },
+  {
+    "id": 63,
+    "text": "Jaymie Huddart",
+    "parent": "author",
+    "value": 911
+  },
+  {
+    "id": 64,
+    "text": "Paler reek at bowling drowsiness breadth spires",
+    "parent": "title",
+    "value": 320
+  },
+  {
+    "id": 64,
+    "text": "Cherianne Saphin",
+    "parent": "author",
+    "value": 983
+  },
+  {
+    "id": 65,
+    "text": "Plummeted supermarket usage suffering's cucumbers initiations",
+    "parent": "title",
+    "value": 716
+  },
+  {
+    "id": 65,
+    "text": "Geno McCart",
+    "parent": "author",
+    "value": 328
+  },
+  {
+    "id": 66,
+    "text": "Banker's overlain annul skull shred tenderizes",
+    "parent": "title",
+    "value": 113
+  },
+  {
+    "id": 66,
+    "text": "Whit Dawidowicz",
+    "parent": "author",
+    "value": 818
+  },
+  {
+    "id": 67,
+    "text": "Haggled curtail undershirt's this",
+    "parent": "title",
+    "value": 785
+  },
+  {
+    "id": 67,
+    "text": "Barrie Wheldon",
+    "parent": "author",
+    "value": 745
+  },
+  {
+    "id": 68,
+    "text": "Jollies lyre herds",
+    "parent": "title",
+    "value": 582
+  },
+  {
+    "id": 68,
+    "text": "Jareb Anthoney",
+    "parent": "author",
+    "value": 948
+  },
+  {
+    "id": 69,
+    "text": "Artistic registries suffocating outlet hindrances",
+    "parent": "title",
+    "value": 70
+  },
+  {
+    "id": 69,
+    "text": "Luce Mucklo",
+    "parent": "author",
+    "value": 206
+  },
+  {
+    "id": 70,
+    "text": "Useful unchallenged inventions collection",
+    "parent": "title",
+    "value": 385
+  },
+  {
+    "id": 70,
+    "text": "Ryan Anthonsen",
+    "parent": "author",
+    "value": 245
+  },
+  {
+    "id": 71,
+    "text": "Descent's cartilage currant's",
+    "parent": "title",
+    "value": 507
+  },
+  {
+    "id": 71,
+    "text": "Hodge Loseby",
+    "parent": "author",
+    "value": 523
+  },
+  {
+    "id": 72,
+    "text": "Machine's december hemming forbearance's attributes",
+    "parent": "title",
+    "value": 168
+  },
+  {
+    "id": 72,
+    "text": "Harrison Jakoubec",
+    "parent": "author",
+    "value": 919
+  },
+  {
+    "id": 73,
+    "text": "Password's noble's disclosed bewildered bugs ballad bookstore",
+    "parent": "title",
+    "value": 588
+  },
+  {
+    "id": 73,
+    "text": "Layton Cogger",
+    "parent": "author",
+    "value": 315
+  },
+  {
+    "id": 74,
+    "text": "Honeycombing grittiest cap's incubation's bursts",
+    "parent": "title",
+    "value": 674
+  },
+  {
+    "id": 74,
+    "text": "Kip Lukasen",
+    "parent": "author",
+    "value": 20
+  },
+  {
+    "id": 75,
+    "text": "Decks preambling bleaker",
+    "parent": "title",
+    "value": 879
+  },
+  {
+    "id": 75,
+    "text": "Donella Fassmann",
+    "parent": "author",
+    "value": 572
+  },
+  {
+    "id": 76,
+    "text": "Ornately glow revoke",
+    "parent": "title",
+    "value": 494
+  },
+  {
+    "id": 76,
+    "text": "Piggy Braban",
+    "parent": "author",
+    "value": 51
+  },
+  {
+    "id": 77,
+    "text": "Arsenals licenced ally replaced corruption clambers",
+    "parent": "title",
+    "value": 103
+  },
+  {
+    "id": 77,
+    "text": "Randene Beade",
+    "parent": "author",
+    "value": 907
+  },
+  {
+    "id": 78,
+    "text": "Dispensation rivetted autocrat vaginae jailers residence",
+    "parent": "title",
+    "value": 217
+  },
+  {
+    "id": 78,
+    "text": "Cull Underhill",
+    "parent": "author",
+    "value": 915
+  },
+  {
+    "id": 79,
+    "text": "Jetted membranes blogs twentieth's",
+    "parent": "title",
+    "value": 525
+  },
+  {
+    "id": 79,
+    "text": "Fiann Abade",
+    "parent": "author",
+    "value": 795
+  },
+  {
+    "id": 80,
+    "text": "Carped gumdrops sure disputed",
+    "parent": "title",
+    "value": 978
+  },
+  {
+    "id": 80,
+    "text": "Kiri Bonus",
+    "parent": "author",
+    "value": 709
+  },
+  {
+    "id": 81,
+    "text": "Skylight tubas read",
+    "parent": "title",
+    "value": 644
+  },
+  {
+    "id": 81,
+    "text": "Rock Kanter",
+    "parent": "author",
+    "value": 218
+  },
+  {
+    "id": 82,
+    "text": "Truest scripts corded possess",
+    "parent": "title",
+    "value": 470
+  },
+  {
+    "id": 82,
+    "text": "Dillie Fortnum",
+    "parent": "author",
+    "value": 723
+  },
+  {
+    "id": 83,
+    "text": "Vise yarn censored rifest ban's",
+    "parent": "title",
+    "value": 227
+  },
+  {
+    "id": 83,
+    "text": "Cam Kynastone",
+    "parent": "author",
+    "value": 92
+  },
+  {
+    "id": 84,
+    "text": "Realized cutbacks renounce snag's",
+    "parent": "title",
+    "value": 495
+  },
+  {
+    "id": 84,
+    "text": "Frederique McCleod",
+    "parent": "author",
+    "value": 640
+  },
+  {
+    "id": 85,
+    "text": "Intellectually wrist's lingerie",
+    "parent": "title",
+    "value": 438
+  },
+  {
+    "id": 85,
+    "text": "Rosa Pedersen",
+    "parent": "author",
+    "value": 759
+  },
+  {
+    "id": 86,
+    "text": "Compiles knickers twelfth deposits",
+    "parent": "title",
+    "value": 751
+  },
+  {
+    "id": 86,
+    "text": "Augusta Wagg",
+    "parent": "author",
+    "value": 212
+  },
+  {
+    "id": 87,
+    "text": "Inventory jangle capriciously imp privatest edge's",
+    "parent": "title",
+    "value": 855
+  },
+  {
+    "id": 87,
+    "text": "Berke Haddrill",
+    "parent": "author",
+    "value": 207
+  },
+  {
+    "id": 88,
+    "text": "Mustiest infatuation's broom deliberates tourist's teems",
+    "parent": "title",
+    "value": 592
+  },
+  {
+    "id": 88,
+    "text": "Rayna Lamperti",
+    "parent": "author",
+    "value": 866
+  },
+  {
+    "id": 89,
+    "text": "Pliant conservative lunacy's",
+    "parent": "title",
+    "value": 549
+  },
+  {
+    "id": 89,
+    "text": "Redd Fleischmann",
+    "parent": "author",
+    "value": 876
+  },
+  {
+    "id": 90,
+    "text": "Mad loots improvisation's loathes sausage's",
+    "parent": "title",
+    "value": 768
+  },
+  {
+    "id": 90,
+    "text": "Georas Probey",
+    "parent": "author",
+    "value": 13
+  },
+  {
+    "id": 91,
+    "text": "Real's merger's flattening cousin wiz contact's suns",
+    "parent": "title",
+    "value": 505
+  },
+  {
+    "id": 91,
+    "text": "Llywellyn Simons",
+    "parent": "author",
+    "value": 391
+  },
+  {
+    "id": 92,
+    "text": "Throwbacks subscribers proffering",
+    "parent": "title",
+    "value": 732
+  },
+  {
+    "id": 92,
+    "text": "Moishe Leetham",
+    "parent": "author",
+    "value": 891
+  },
+  {
+    "id": 93,
+    "text": "Gondola's platforming practical conception's ligament's woolie",
+    "parent": "title",
+    "value": 33
+  },
+  {
+    "id": 93,
+    "text": "Shanie Oglethorpe",
+    "parent": "author",
+    "value": 580
+  },
+  {
+    "id": 94,
+    "text": "Disillusioning unimaginative reeks launching sensuality's",
+    "parent": "title",
+    "value": 240
+  },
+  {
+    "id": 94,
+    "text": "Pearle Reichert",
+    "parent": "author",
+    "value": 165
+  },
+  {
+    "id": 95,
+    "text": "Haemorrhaged poop dusk gamest officially transmitted",
+    "parent": "title",
+    "value": 459
+  },
+  {
+    "id": 95,
+    "text": "Durand Crasswell",
+    "parent": "author",
+    "value": 307
+  },
+  {
+    "id": 96,
+    "text": "Linchpin boyfriend inept calves netted dissenting",
+    "parent": "title",
+    "value": 515
+  },
+  {
+    "id": 96,
+    "text": "Henka Vinsen",
+    "parent": "author",
+    "value": 942
+  },
+  {
+    "id": 97,
+    "text": "Regressions replicas dreaded instituting",
+    "parent": "title",
+    "value": 397
+  },
+  {
+    "id": 97,
+    "text": "Nadya Sumers",
+    "parent": "author",
+    "value": 717
+  },
+  {
+    "id": 98,
+    "text": "Claim's antagonist easter's regained",
+    "parent": "title",
+    "value": 974
+  },
+  {
+    "id": 98,
+    "text": "Carol Frigot",
+    "parent": "author",
+    "value": 673
+  },
+  {
+    "id": 99,
+    "text": "Ride lengthen monkeyed phosphorescent clasp's philanthropic study's",
+    "parent": "title",
+    "value": 169
+  },
+  {
+    "id": 99,
+    "text": "Ofelia Canon",
+    "parent": "author",
+    "value": 379
+  },
+  {
+    "id": 100,
+    "text": "Commiserate measurable rates characteristics",
+    "parent": "title",
+    "value": 243
+  },
+  {
+    "id": 100,
+    "text": "Hermon Wilhelmy",
+    "parent": "author",
+    "value": 885
+  }
+]
+            }]
+        };
+
+        fetch(`http://localhost:3000/`, { headers: { 'Access-Control-Allow-Origin': `*` } })
+            .then(function (response) {
+                return response.json();
+            }).then(function (booksInfo) {
+                //console.log(booksInfo);
+                addToBooksChart(booksInfo);
+            });
+
+        function addToBooksChart(booksInfo) {
+            //console.log(booksInfo);
+            booksChartConfig.graphset[0].series.push({
+                id: 'books',
+                text: 'Books',
+                parent: '',
+            }, {
+                id: 'author',
+                text: 'Author',
+                parent: 'books',
+
+            }, {
+                id: 'title',
+                text: 'Title',
+                parent: 'books',
+            });
+
+            for (let i = 0; i < 10; i++) {
+                booksChartConfig.graphset[0].series.push({
+                    id: booksInfo[i].Title,
+                    text: booksInfo[i].Title,
+                    parent: 'books',
+                    value: Math.floor((Math.random() * 1000) + 1)
+                });
+                // booksData[i]= {
+                //     id: booksInfo[i].Title,
+                //     text: booksInfo[i].Title,
+                //     parent: 'author',
+                //     value: Math.floor((Math.random() * 100000) + 1)
+                // }
+
+            }
+            console.log(booksChartConfig.graphset[0].series);
+
+            //console.log(booksData[3]);
+        }
+
+        console.log(booksChartConfig.graphset[0].series);
+
+        var fieldsConfig = {
+            type: "pie",
+            plot: {
+                borderColor: "#2B313B",
+                //borderWidth: 5,
+                // slice: 90,
+                valueBox: {
+                    placement: 'out',
+                    text: '%t\n%npv%',
+                    fontFamily: "Open Sans"
+                },
+                tooltip: {
+                    fontSize: '18',
+                    fontFamily: "Open Sans",
+                    padding: "5 10",
+                    text: "%npv%"
+                },
+                animation: {
+                    effect: 2,
+                    method: 5,
+                    speed: 900,
+                    sequence: 1,
+                    delay: 3000
+                }
+            },
+            title: {
+                fontColor: "#8e99a9",
+                text: 'Comprising of varieties',
+                align: "center",
+                offsetX: 10,
+                fontFamily: "Open Sans",
+                fontSize: 25
+            },
+            // subtitle: {
+            //     offsetX: 10,
+            //     offsetY: 10,
+            //     fontColor: "#8e99a9",
+            //     fontFamily: "Open Sans",
+            //     fontSize: "16",
+            //     text: 'May 2016',
+            //     align: "left"
+            // },
+            plotarea: {
+                margin: "20 0 0 0"
+            },
+            series: [
+
+                {
+                    "text": "Accounting",
+                    "values": [
+                        8.7
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Business Development",
+                    "values": [
+                        7.9
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Engineering",
+                    "values": [
+                        7.3
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "History",
+                    "detached": true,
+                    "values": [
+                        0.1
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Human Resources",
+                    "detached": true,
+                    "values": [
+                        9.7
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Legal",
+                    "values": [
+                        8.7
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Marketing",
+                    "values": [
+                        8.7
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Product Management",
+                    "values": [
+                        8.2
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Research and Development",
+                    "values": [
+                        7.4
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Sales",
+                    "values": [
+                        8.3
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Services",
+                    "values": [
+                        8.3
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Support",
+                    "values": [
+                        8.4
+                    ],
+                    "backgroundColor": "#29a2cc"
+                },
+                {
+                    "text": "Training",
+                    "values": [
+                        8.3
+                    ],
+                    "backgroundColor": "#29a2cc"
+                }
+            ]
+        };
+
+        fetch(`http://localhost:3000/fields`, { headers: { 'Access-Control-Allow-Origin': `*` } })
+            .then(function (res) {
+                return res.json();
+            }).then(function (fields) {
+                addTofields(fields);
+            });
+
+        function addTofields(fields) {
+            for (let i = 0; i < fields.length; i++) {
+                fieldsConfig.series.push({
+                    text: fields[i].field,
+                    values: [fields[i].percentage],
+                    backgroundColor: '#29a2cc'
+                })
+            }
+        }
+
+        zingchart.render({
+            id: 'booksCountChart',
+            data: booksCount,
+            height: '700px',
+            width: '98%'
+        });
+
+        zingchart.loadModules('maps, maps-world-countries', function (e) {
+            zingchart.render({
+                id: 'usersLocationChart',
+                data: dataObj,
+                height: '800px',
+                width: '100%'
+            });
+        });
+
+        zingchart.render({
+            id: 'booksChart',
+            data: booksChartConfig,
+            height: '800px',
+            width: '100%',
+        });
+
+        zingchart.render({
+            id: 'fields',
+            data: fieldsConfig,
+            height: '600px',
+            width: '100%'
+        });
+        console.log(fieldsConfig['series']);
+
+    </script>
+</body>
+
+</html>

@@ -9,19 +9,19 @@ function getBookId(e) {
     if (e.target.className === 'bookcard') {
         let bookId = e.target.children[0].innerText;
         fetch(`http://localhost:3000/posts/${bookId}`, { headers: { 'Access-Control-Allow-Origin': `*` } })
-        .then( function (res) {
-            return res.json();
-        })
-        .then( function (posts) {
-            appendData(posts);
-        })
-        .catch( function (err) {
-            console.log('fetchError:' + err);
-        });
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (posts) {
+                appendData(posts);
+            })
+            .catch(function (err) {
+                console.log('fetchError:' + err);
+            });
         document.getElementById("posts-overlay").style.display = "flex";
-		document.getElementById("posts-popup").style.display = "block";
+        document.getElementById("posts-popup").style.display = "block";
     }
-    else {return}
+    else { return }
 }
 
 function appendData(posts) {
